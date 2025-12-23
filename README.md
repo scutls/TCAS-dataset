@@ -127,21 +127,27 @@ class TCASDataset:
     
     def _load_split(self):
         split_file = os.path.join(self.root_dir, 'metadata', f'{self.split}_split.txt')
-        with open(split_file, 'r') as f:
-            return [line.strip() for line in f.readlines()]
+        with open(split_file, 'r', encoding='utf-8') as f:
+            return [line.strip() for line in f if line.strip()]
     
     def load_video(self, video_id):
-        video_path = os.path.join(self.root_dir, 'videos', f'{video_id}.mp4')
+        # Determine category from video_id prefix
+        category = 'crash' if video_id.startswith('crash_') else 'normal'
+        video_path = os.path.join(self.root_dir, 'videos', category, f'{video_id}.mp4')
         return cv2.VideoCapture(video_path)
     
     def load_annotation(self, video_id):
-        anno_path = os.path.join(self.root_dir, 'annotations', f'{video_id}.json')
-        with open(anno_path, 'r') as f:
+        # Determine category from video_id prefix
+        category = 'crash' if video_id.startswith('crash_') else 'normal'
+        anno_path = os.path.join(self.root_dir, 'annotations', category, f'{video_id}.json')
+        with open(anno_path, 'r', encoding='utf-8') as f:
             return json.load(f)
 
 # Example usage
 dataset = TCASDataset('/path/to/TCAS-dataset', split='train')
 ```
+
+For a complete implementation with additional features, see the `tcas_loader.py` file in this repository.
 
 ### Evaluation Metrics
 
