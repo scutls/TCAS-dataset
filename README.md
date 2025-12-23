@@ -20,12 +20,14 @@ The TCAS dataset addresses the critical challenge of anticipating traffic crashe
 
 The TCAS dataset includes:
 
-- **Total videos**: [Number of video sequences]
-- **Total frames**: [Number of annotated frames]
-- **Crash categories**: [Number of crash types]
-- **Average sequence length**: [Duration in seconds]
-- **Resolution**: [Video resolution]
-- **Frame rate**: [FPS]
+- **Total videos**: TBD
+- **Total frames**: TBD
+- **Crash categories**: TBD
+- **Average sequence length**: TBD
+- **Resolution**: TBD
+- **Frame rate**: TBD
+
+> **Note**: Please refer to the paper or contact the dataset maintainers for specific statistics.
 
 ## Download and Access
 
@@ -33,7 +35,7 @@ The TCAS dataset includes:
 
 The TCAS dataset is available for academic research purposes. To obtain access:
 
-1. **Fill out the request form**: [Link to request form or email]
+1. **Fill out the request form**: Contact the dataset maintainers (see Contact section below)
 2. **Provide your affiliation**: Valid academic or research institution email required
 3. **Describe your research**: Brief description of intended use
 4. **Agree to terms**: Sign the dataset license agreement
@@ -165,12 +167,14 @@ If you use the TCAS dataset in your research, please cite our paper:
 ```bibtex
 @inproceedings{tcas2025,
   title={TCAS: A Fine-Grained Surveillance Dataset for Traffic Crash Anticipation},
-  author={[Author names]},
-  booktitle={[Conference/Journal name]},
+  author={TBD},
+  booktitle={TBD},
   year={2025},
-  organization={[Organization]}
+  organization={TBD}
 }
 ```
+
+> **Note**: Please refer to the published paper for the complete citation information.
 
 ## License
 
@@ -180,17 +184,17 @@ This dataset is released under the MIT License. See [LICENSE](LICENSE) for detai
 
 For questions, issues, or dataset requests:
 
-- **Email**: [Contact email]
+- **Email**: Please use the GitHub issue tracker or check the published paper for contact information
 - **Issues**: Please use the GitHub issue tracker for bug reports and feature requests
 - **Updates**: Watch this repository for dataset updates and announcements
 
 ## Acknowledgments
 
-We thank all contributors and annotators who made this dataset possible. This work was supported by [funding sources/institutions].
+We thank all contributors and annotators who made this dataset possible.
 
 ## Changelog
 
 ### Version 1.0.0 (Initial Release)
 - Initial public release of the TCAS dataset
-- Includes [X] videos with frame-level annotations
-- Train/val/test splits provided
+- Comprehensive documentation and dataset loader utilities
+- Train/val/test splits specifications provided
