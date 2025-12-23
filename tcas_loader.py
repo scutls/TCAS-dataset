@@ -10,6 +10,14 @@ from typing import Dict, List, Optional, Tuple
 import cv2
 import numpy as np
 
+# Optional dependencies for visualization
+try:
+    import matplotlib.pyplot as plt
+    import matplotlib.patches as patches
+    HAS_MATPLOTLIB = True
+except ImportError:
+    HAS_MATPLOTLIB = False
+
 
 class TCASDataset:
     """
@@ -39,8 +47,8 @@ class TCASDataset:
         if not os.path.exists(split_file):
             raise FileNotFoundError(f"Split file not found: {split_file}")
         
-        with open(split_file, 'r') as f:
-            return [line.strip() for line in f.readlines() if line.strip()]
+        with open(split_file, 'r', encoding='utf-8') as f:
+            return [line.strip() for line in f if line.strip()]
     
     def __len__(self) -> int:
         """Return the number of videos in this split."""
@@ -79,6 +87,10 @@ class TCASDataset:
             
         Returns:
             np.ndarray: Array of frames with shape (num_frames, height, width, channels)
+            
+        Note:
+            This method loads all frames into memory. For large videos, consider
+            implementing lazy loading or processing frames one at a time.
         """
         # Determine video path
         if video_id.startswith('crash_'):
@@ -91,23 +103,28 @@ class TCASDataset:
         
         # Load video
         cap = cv2.VideoCapture(video_path)
+        
+        if not cap.isOpened():
+            raise RuntimeError(f"Failed to open video: {video_path}")
+        
         frames = []
         
-        while True:
-            ret, frame = cap.read()
-            if not ret:
-                break
-            
-            # Convert BGR to RGB
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            
-            # Apply transform if provided
-            if self.transform:
-                frame = self.transform(frame)
-            
-            frames.append(frame)
-        
-        cap.release()
+        try:
+            while True:
+                ret, frame = cap.read()
+                if not ret:
+                    break
+                
+                # Convert BGR to RGB
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                
+                # Apply transform if provided
+                if self.transform:
+                    frame = self.transform(frame)
+                
+                frames.append(frame)
+        finally:
+            cap.release()
         
         return np.array(frames)
     
@@ -134,7 +151,7 @@ class TCASDataset:
         if not os.path.exists(anno_path):
             raise FileNotFoundError(f"Annotation file not found: {anno_path}")
         
-        with open(anno_path, 'r') as f:
+        with open(anno_path, 'r', encoding='utf-8') as f:
             annotation = json.load(f)
         
         # Cache annotation
@@ -191,7 +208,7 @@ class TCASDataset:
         if not os.path.exists(stats_path):
             raise FileNotFoundError(f"Statistics file not found: {stats_path}")
         
-        with open(stats_path, 'r') as f:
+        with open(stats_path, 'r', encoding='utf-8') as f:
             return json.load(f)
 
 
@@ -203,9 +220,12 @@ def visualize_frame(frame: np.ndarray, annotation: Dict, save_path: Optional[str
         frame (np.ndarray): Frame image
         annotation (dict): Frame annotation
         save_path (str, optional): Path to save the visualization
+        
+    Raises:
+        ImportError: If matplotlib is not installed
     """
-    import matplotlib.pyplot as plt
-    import matplotlib.patches as patches
+    if not HAS_MATPLOTLIB:
+        raise ImportError("matplotlib is required for visualization. Install with: pip install matplotlib")
     
     fig, ax = plt.subplots(1, figsize=(12, 8))
     ax.imshow(frame)
